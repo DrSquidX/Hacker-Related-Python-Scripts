@@ -1,5 +1,5 @@
 import socket, random, time, threading, sys
-sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 packet = random._urandom(42069)
 sent = 0
 request_sent = 0
