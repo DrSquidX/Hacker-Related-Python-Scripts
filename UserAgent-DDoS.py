@@ -1,4 +1,5 @@
 import socket, threading, requests, random, time
+#this can most likely bring down small websites.
 while True:
     file = input("[+] Enter the file with bots: ")
     try:
