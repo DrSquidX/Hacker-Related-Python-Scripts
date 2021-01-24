@@ -1,4 +1,7 @@
-import socket, threading, requests, random, time, os
+try:
+    import socket, threading, requests, random, time, os
+except:
+    print("[+] Missing dependecies: {Module 'requests'}")
 print("")
 print("  _    _                                      _     _____  _____        _____   ____   ___  ")
 print(" | |  | |               /\                   | |   |  __ \|  __ \      / ____| |___ \ / _ \ ")
