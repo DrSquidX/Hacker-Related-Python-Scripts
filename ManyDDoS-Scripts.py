@@ -172,6 +172,7 @@ def synflood():
             s.send(bytes(e))
     except:
         print("[+] Permission Error: Make sure to run this script as administrator.")
+        main()
 def requester():
     os.system('cls')
     print("")
