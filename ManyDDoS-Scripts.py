@@ -199,7 +199,7 @@ def requester():
             break
         except:
             print("[+] Invalid File Specified.")
-    while True:  # cooldown 10 and threadcreate 43-45 and 2 in-thread cooldown for killing peepeepoopoo.com
+    while True:
         try:
             ip = input("[+] Enter IP to attack(include the 'https://www.'): ")
             cooldown = int(input("[+] How long is the cooldown(recommended for smaller websites)?: "))
