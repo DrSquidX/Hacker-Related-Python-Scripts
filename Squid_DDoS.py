@@ -61,7 +61,7 @@ q = Queue()
 q2 = Queue()
 if __name__ == '__main__':
     while True:
-
+        try:
             os.system('cls')
             print("   _____             _     _   _____  _____        _____        __   ___ ")
             print("  / ____|           (_)   | | |  __ \|  __ \      / ____|      /_ | / _ \ ")
@@ -99,6 +99,7 @@ if __name__ == '__main__':
                     q2.put(item)
                 q.join()
                 q2.join()
-
+        except:
+            print("[+] Invalid Input.")
 else:
     print("[+] How did you get here?")
