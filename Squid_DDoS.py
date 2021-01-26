@@ -61,7 +61,7 @@ q = Queue()
 q2 = Queue()
 if __name__ == '__main__':
     while True:
-        try:
+
             os.system('cls')
             print("   _____             _     _   _____  _____        _____        __   ___ ")
             print("  / ____|           (_)   | | |  __ \|  __ \      / ____|      /_ | / _ \ ")
@@ -79,7 +79,6 @@ if __name__ == '__main__':
             tester = socket.gethostbyname(host)
             port = int(input("[+] Enter the port to attack: "))
             thr = int(input("[+] How many threads will be created?: "))
-            user_agent()
             get_bots()
             while True:
                 for i in range(thr):
@@ -100,7 +99,6 @@ if __name__ == '__main__':
                     q2.put(item)
                 q.join()
                 q2.join()
-        except:
-            print("[+] Invalid Input.")
+
 else:
     print("[+] How did you get here?")
