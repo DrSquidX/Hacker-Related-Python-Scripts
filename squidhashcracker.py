@@ -1,7 +1,5 @@
 import hashlib, sys
 from optparse import OptionParser
-
-
 def get_args():
     global encoding
     global filename
@@ -11,10 +9,15 @@ def get_args():
     onlyencode = False
     args = OptionParser()
     args.add_option("-E", "--encode", dest="encoding", help="Type of encoding")
-    args.add_option("-F", "--filename", dest="filename", help="filename of passwords")
-    args.add_option('-H', '--hash', dest="hash", help="specify hash")
-    args.add_option('-S', '--string', dest="string")
+    args.add_option("-F", "--filename", dest="filename", help="Filename of passwords")
+    args.add_option('-H', '--hash', dest="hash", help="Specify hash to decode")
+    args.add_option('-S', '--string', dest="String to Encode")
+    args.add_option('-I','--info',dest='info',action='store_true')
     arg, opt = args.parse_args()
+    if arg.info is not None:
+        usage()
+    else:
+        pass
     if arg.encoding is None:
         encoding = "md5"
     else:
@@ -33,8 +36,7 @@ def get_args():
             usage()
         else:
             hash = arg.hash
-
-
+            hash = hash.strip()
 def usage():
     print("""
   _____             _     _ _    _           _      _____                _               ___    ___  
@@ -45,10 +47,10 @@ def usage():
 |_____/ \__, |\__,_|_|\__,_|_|  |_|\__,_|___/_| |_|\_____|_|  \__,_|\___|_|\_\___|_|    |____(_)___/ 
            | |                                                                                       
            |_|                                                              
-Script By DrSquid\n
+Script By DrSquid
 
 Commands:
--F, --filename : specifies a filename
+-F, --filename : Specifies the filename of the password list
 -E, --encoding : Specifies which type of encoding(default is md5)
 -H, --hash : Specify the hash to decode
 -S, --string : Specify a string to encode
@@ -58,10 +60,13 @@ python3 squidhashcracker.py -H 5d41402abc4b2a76b9719d911017c592 -E md5 -F passwo
     """)
     sys.exit()
     quit()
-
-
 def decode(hash):
-    file = open(filename, 'r')
+    try:
+        file = open(filename, 'r')
+    except:
+        print("[+] File Not Found!")
+        sys.exit()
+        quit()
     lines = file.readlines()
     for line in lines:
         line = line.strip()
@@ -91,9 +96,8 @@ def decode(hash):
             quit()
         else:
             print(f"[+] {line} was not a match.")
-
-
-def encode(string, hashtype):
+    print("[+] Unable to find a match to the Hash - Try using a different password list.")
+def encode(string):
     if encoding == "md5":
         enc = hashlib.md5(string.encode()).hexdigest()
     elif encoding == "sha256":
@@ -110,8 +114,6 @@ def encode(string, hashtype):
         print("[+] Invalid Encoding.")
         usage()
     return enc
-
-
 if __name__ == "__main__":
     get_args()
     if len(sys.argv) < 3:
@@ -129,5 +131,5 @@ Script By DrSquid\n""")
     if not onlyencode:
         decode(hash)
     else:
-        encoded_str = encode(string, encoding)
+        encoded_str = encode(string)
         print(encoded_str)
