@@ -1,5 +1,7 @@
 import hashlib, sys
 from optparse import OptionParser
+
+
 def get_args():
     global encoding
     global filename
@@ -8,10 +10,10 @@ def get_args():
     global string
     onlyencode = False
     args = OptionParser()
-    args.add_option("-E","--encode",dest="encoding",help="Type of encoding")
-    args.add_option("-F","--filename",dest="filename",help="filename of passwords")
-    args.add_option('-H','--hash',dest="hash",help="specify hash")
-    args.add_option('-S','--string',dest="string")
+    args.add_option("-E", "--encode", dest="encoding", help="Type of encoding")
+    args.add_option("-F", "--filename", dest="filename", help="filename of passwords")
+    args.add_option('-H', '--hash', dest="hash", help="specify hash")
+    args.add_option('-S', '--string', dest="string")
     arg, opt = args.parse_args()
     if arg.encoding is None:
         encoding = "md5"
@@ -31,6 +33,8 @@ def get_args():
             usage()
         else:
             hash = arg.hash
+
+
 def usage():
     print("""
   _____             _     _ _    _           _      _____                _               ___    ___  
@@ -39,10 +43,10 @@ def usage():
  \___ \ / _` | | | | |/ _` |  __  |/ _` / __| '_ \| |    | '__/ _` |/ __| |/ / _ \ '__|   / / | | | |
  ____) | (_| | |_| | | (_| | |  | | (_| \__ \ | | | |____| | | (_| | (__|   <  __/ |     / /_ | |_| |
 |_____/ \__, |\__,_|_|\__,_|_|  |_|\__,_|___/_| |_|\_____|_|  \__,_|\___|_|\_\___|_|    |____(_)___/ 
-               | |                                                                                       
-               |_|                                                              
+           | |                                                                                       
+           |_|                                                              
 Script By DrSquid\n
-    
+
 Commands:
 -F, --filename : specifies a filename
 -E, --encoding : Specifies which type of encoding(default is md5)
@@ -54,6 +58,8 @@ python3 squidhashcracker.py -H 5d41402abc4b2a76b9719d911017c592 -E md5 -F passwo
     """)
     sys.exit()
     quit()
+
+
 def decode(hash):
     file = open(filename, 'r')
     lines = file.readlines()
@@ -85,6 +91,8 @@ def decode(hash):
             quit()
         else:
             print(f"[+] {line} was not a match.")
+
+
 def encode(string, hashtype):
     if encoding == "md5":
         enc = hashlib.md5(string.encode()).hexdigest()
@@ -102,6 +110,8 @@ def encode(string, hashtype):
         print("[+] Invalid Encoding.")
         usage()
     return enc
+
+
 if __name__ == "__main__":
     get_args()
     if len(sys.argv) < 3:
