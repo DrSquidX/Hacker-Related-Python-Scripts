@@ -79,7 +79,7 @@ def decode(hash):
         print(f"\n[+] String: {line}")
         print(f"[+] Hashed String: {enc}")
         if enc == hash:
-            print(f"[+] Found a match: {line}")
+            print(f"[+] Found a match: {line}\n")
             input("[+] Press enter to exit.")
             sys.exit()
             quit()
