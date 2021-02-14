@@ -18,7 +18,7 @@ def listen():
         except:
             pass
 def handler(c, msg, ip):
-
+    try:
         already_requested = False
         c.send('HTTP/1.0 200 OK\n'.encode())
         c.send('Content-Type: text/html\n'.encode())
@@ -180,5 +180,6 @@ def handler(c, msg, ip):
                                                 """
             c.send(msgtoclient.encode())
         c.close()
-
+    except:
+        pass
 listen()
